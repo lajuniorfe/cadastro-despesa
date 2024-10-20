@@ -1,40 +1,83 @@
 <p-card header="Cadastro de despesa" styleClass="m-8 shadow-4">
-  <form [formGroup]=" cadastroForm">
+  <form [formGroup]="cadastroForm">
     <div class="grid">
-      <div class="col-6 ">
+      <div class="col-6">
         <p-floatLabel>
-          <input type="text" pInputText formControlName="descricao" class="w-full" />
+          <input
+            type="text"
+            pInputText
+            formControlName="descricao"
+            class="w-full"
+          />
           <label for="descricao">Despesa</label>
         </p-floatLabel>
       </div>
 
-      <div class="col-6 ">
+      <div class="col-6">
         <p-floatLabel>
-          <p-inputNumber inputId="valor-despesa" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
-            formControlName="value" class="w-full" />
+          <p-inputNumber
+            inputId="valor-despesa"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="5"
+            formControlName="valor"
+            class="w-full"
+          />
           <label for="despesa">Valor Despesa</label>
         </p-floatLabel>
       </div>
 
-      <div class="col-12">
-        <p-dropdown formControlName="categorias" [options]="listaCategorias" optionLabel="nome"
-          placeholder="Selecione a categoria" styleClass="w-full" />
+      <div class="col-6">
+        <p-dropdown
+          formControlName="categoria"
+          [options]="listaCategorias"
+          optionLabel="nome"
+          placeholder="Selecione a categoria"
+          styleClass="w-full"
+        />
       </div>
 
-      <div class="col-12 ">
-        <p-dropdown formControlName="pagamento" [options]="listaPagamentos" optionLabel="nome"
-          placeholder="Forma Pagamento" styleClass="w-full" />
+      <div class="col-6">
+        <p-dropdown
+          formControlName="pagamento"
+          [options]="listaPagamentos"
+          optionLabel="nome"
+          placeholder="Forma Pagamento"
+          styleClass="w-full"
+        />
       </div>
 
+      @if(cadastroForm.get('pagamento')?.value.nome == 'Cartão de crédito' ){
       <div class="col-12">
-        <p-dropdown formControlName="parcelas" [options]="listaParcelas" optionLabel="quantidade" placeholder="Parcelas"
-          styleClass="w-full" />
-
+        <p-dropdown
+          formControlName="parcelas"
+          [options]="listaParcelas"
+          optionLabel="quantidade"
+          placeholder="Parcela"
+          styleClass="w-full"
+        />
       </div>
-
+      }
+      <p-toast />
+      @if(!carregando){
       <div class="col-12">
-        <p-button id="btn-cadastrar" label="Cadastrar" styleClass="w-full" />
+        <p-button
+          id="btn-cadastrar"
+          label="Cadastrar"
+          styleClass="w-full"
+          (onClick)="cadastrarDespesa()"
+        />
+      </div>
+      }
+    </div>
+    @if(carregando){
+    <div class="flex flex-column">
+      <div
+        class="flex align-items-center justify-content-center font-bold border-round m-2"
+      >
+        <p-progressSpinner ariaLabel="loading" />
       </div>
     </div>
+    }
   </form>
 </p-card>
