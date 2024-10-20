@@ -10,5 +10,5 @@ import { CadastroDespesaComponent } from './components/cadastro-despesa/cadastro
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'cadatro-despesa';
+  title = 'cadastro-despesa';
 }
