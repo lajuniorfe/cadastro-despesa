@@ -96,4 +96,26 @@ export class CadastroDespesaComponent {
       },
     });
   }
+
+  buscarDespesa() {
+    this.despesaServico.obterDespesas().subscribe({
+      next: (response) => {
+        console.log('retornado algo', response);
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao cadastrar despesa!',
+        });
+
+        console.error('Erro ao cadastrar despesa:', erro);
+      },
+      complete: () => {
+        this.carregando = false;
+        console.log('Requisição concluída.');
+      },
+    });
+  }
 }

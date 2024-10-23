@@ -3,17 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IDespesaResponse } from '../dtos/responses/IDespesasResponse';
 import { IDespesaRequest } from '../dtos/requests/IDespesasRequest';
+import { environment } from '../../../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DespesaService {
-  private readonly apiUrl = 'https://api.exemplo.com/pagamentos';
+  private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   obterDespesas(): Observable<IDespesaResponse[]> {
-    return this.http.get<IDespesaResponse[]>(this.apiUrl);
+    return this.http.get<IDespesaResponse[]>(`${this.apiUrl}/despesa/`);
   }
 
   cadastrarDespesa(despesa: IDespesaRequest): Observable<IDespesaResponse> {
@@ -21,6 +22,12 @@ export class DespesaService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<IDespesaResponse>(this.apiUrl, despesa, { headers });
+    return this.http.post<IDespesaResponse>(
+      `${this.apiUrl}/despesa/`,
+      despesa,
+      {
+        headers,
+      }
+    );
   }
 }
