@@ -20,6 +20,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ICartaoResponse } from '../../api/cartao/dtos/responses/cartao.response';
+import { CategoriaService } from '../../api/categoria/services/categoria.service';
+import { ICategoriaResponse } from '../../api/categoria/dtos/responses/categoria.responses';
 
 @Component({
   selector: 'app-cadastro-despesa',
@@ -43,7 +45,7 @@ import { ICartaoResponse } from '../../api/cartao/dtos/responses/cartao.response
 })
 export class CadastroDespesaComponent {
   cadastroForm!: FormGroup;
-  listaCategorias: any = [{ nome: 'Lazer' }, { nome: 'Alimentação' }];
+  listaCategorias: ICategoriaResponse[] | undefined;
   listaPagamentos: any = [{ nome: 'Pix' }, { nome: 'Cartão de crédito' }];
   listaParcelas: any = [{ quantidade: '1X' }, { quantidade: '12X' }];
   listaCartoes: ICartaoResponse[] | undefined;
@@ -59,7 +61,8 @@ export class CadastroDespesaComponent {
   constructor(
     private readonly despesaServico: DespesaService,
     private messageService: MessageService,
-    private cartaoService: CartaoService
+    private cartaoService: CartaoService,
+    private categoriaServico: CategoriaService
   ) {}
 
   ngOnInit() {
@@ -71,6 +74,7 @@ export class CadastroDespesaComponent {
       parcela: new FormControl(''),
     });
     this.buscarListaCartao();
+    this.buscarListaCategoria();
   }
 
   getPagamentoControl() {
@@ -122,6 +126,22 @@ export class CadastroDespesaComponent {
           severity: 'error',
           summary: 'Erro',
           detail: 'Erro ao buscar cartões!',
+        });
+      },
+    });
+  }
+
+  buscarListaCategoria() {
+    this.categoriaServico.obterCategoriasDespesas().subscribe({
+      next: (response: ICategoriaResponse[]) => {
+        this.listaCategorias = response;
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao buscar categorias!',
         });
       },
     });
