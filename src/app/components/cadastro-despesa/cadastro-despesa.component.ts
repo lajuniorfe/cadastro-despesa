@@ -1,5 +1,5 @@
 import { CartaoService } from './../../api/cartao/services/cartao.service';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -57,6 +57,7 @@ export class CadastroDespesaComponent {
     formaPagamento: '',
   };
   exibir: boolean = false;
+  exibirOpcoesCartao: boolean = false;
 
   constructor(
     private readonly despesaServico: DespesaService,
@@ -72,6 +73,7 @@ export class CadastroDespesaComponent {
       descricao: new FormControl(''),
       pagamento: new FormControl(''),
       parcela: new FormControl(''),
+      cartao: new FormControl(''),
     });
     this.buscarListaCartao();
     this.buscarListaCategoria();
@@ -81,6 +83,13 @@ export class CadastroDespesaComponent {
     return this.cadastroForm.get('pagamento');
   }
 
+  onPagamentoChange(algo: any) {
+    if (algo.value.nome === 'Cartão de crédito') {
+      this.exibirOpcoesCartao = true;
+    } else {
+      this.exibirOpcoesCartao = false;
+    }
+  }
   cadastrarDespesa() {
     this.despesaCadastrar.categoria =
       this.cadastroForm.get('categoria')?.value.nome;

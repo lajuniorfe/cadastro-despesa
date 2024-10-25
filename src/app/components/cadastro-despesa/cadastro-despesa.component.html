@@ -23,16 +23,16 @@
 
       <div class="col-6">
         <p-dropdown formControlName="pagamento" [options]="listaPagamentos" optionLabel="nome"
-          placeholder="Forma Pagamento" styleClass="w-full" (onChange)="getPagamentoControl()" />
+          placeholder="Forma Pagamento" styleClass="w-full" (onChange)="onPagamentoChange($event)" />
       </div>
 
-      @if(getPagamentoControl()?.value.nome == 'Cartão de crédito' ){
+      @if(exibirOpcoesCartao ){
       <div class="col-6">
         <p-dropdown formControlName="cartao" [options]="listaCartoes" optionLabel="nome" placeholder="Cartões"
           styleClass="w-full" />
       </div>
       <div class="col-6">
-        <p-dropdown formControlName="parcelas" [options]="listaParcelas" optionLabel="quantidade" placeholder="Parcela"
+        <p-dropdown formControlName="parcela" [options]="listaParcelas" optionLabel="quantidade" placeholder="Parcela"
           styleClass="w-full" />
       </div>
       }
