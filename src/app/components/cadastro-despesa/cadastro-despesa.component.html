@@ -23,11 +23,15 @@
 
       <div class="col-6">
         <p-dropdown formControlName="pagamento" [options]="listaPagamentos" optionLabel="nome"
-          placeholder="Forma Pagamento" styleClass="w-full" />
+          placeholder="Forma Pagamento" styleClass="w-full" (onChange)="getPagamentoControl()" />
       </div>
 
-      @if(cadastroForm.get('pagamento')?.value.nome == 'Cartão de crédito' ){
-      <div class="col-12">
+      @if(getPagamentoControl()?.value.nome == 'Cartão de crédito' ){
+      <div class="col-6">
+        <p-dropdown formControlName="cartao" [options]="listaCartoes" optionLabel="nome" placeholder="Cartões"
+          styleClass="w-full" />
+      </div>
+      <div class="col-6">
         <p-dropdown formControlName="parcelas" [options]="listaParcelas" optionLabel="quantidade" placeholder="Parcela"
           styleClass="w-full" />
       </div>
@@ -35,7 +39,14 @@
       <p-toast />
       @if(!carregando){
       <div class="col-12">
-        <p-button id="btn-cadastrar" label="Cadastrar" styleClass="w-full" (onClick)="cadastrarDespesa()" />
+        <div class="flex justify-content-end flex-wrap flex align-content-end">
+          <div class="flex align-items-center justify-content-center font-bold border-round m-2">
+            <p-button label="Cancelar" [text]="true" [raised]="true" severity="danger" />
+          </div>
+          <div class="flex align-items-center justify-content-center font-bold border-round m-2">
+            <p-button id="btn-cadastrar" label="Cadastrar" styleClass="w-full" (onClick)="cadastrarDespesa()" />
+          </div>
+        </div>
       </div>
       }
     </div>
@@ -47,6 +58,4 @@
     </div>
     }
   </form>
-
-  <p-button id="btn-cadastrar" label="aaaaaaaaaaaaaaaaaaaaaaaaaaa" styleClass="w-full" (onClick)="buscarDespesa()" />
 </p-card>

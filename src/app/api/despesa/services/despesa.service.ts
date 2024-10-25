@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IDespesaResponse } from '../dtos/responses/IDespesasResponse';
+import { IDespesaResponse } from '../dtos/responses/despesa.response';
 import { IDespesaRequest } from '../dtos/requests/IDespesasRequest';
 import { environment } from '../../../../environments/environments';
 
