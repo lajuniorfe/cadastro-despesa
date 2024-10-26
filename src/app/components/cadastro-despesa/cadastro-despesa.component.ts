@@ -22,6 +22,8 @@ import { MessageService } from 'primeng/api';
 import { ICartaoResponse } from '../../api/cartao/dtos/responses/cartao.response';
 import { CategoriaService } from '../../api/categoria/services/categoria.service';
 import { ICategoriaResponse } from '../../api/categoria/dtos/responses/categoria.responses';
+import { TipoDespesaService } from '../../api/tipo-despesa/services/tipo-despesa.service';
+import { ITipoDespesaResponse } from '../../api/tipo-despesa/dtos/responses/tipo-despesa.response';
 
 @Component({
   selector: 'app-cadastro-despesa',
@@ -46,6 +48,7 @@ import { ICategoriaResponse } from '../../api/categoria/dtos/responses/categoria
 export class CadastroDespesaComponent {
   cadastroForm!: FormGroup;
   listaCategorias: ICategoriaResponse[] | undefined;
+  listaTipoDespesa: ITipoDespesaResponse[] | undefined;
   listaPagamentos: any = [{ nome: 'Pix' }, { nome: 'Cartão de crédito' }];
   listaParcelas: any = [{ quantidade: '1X' }, { quantidade: '12X' }];
   listaCartoes: ICartaoResponse[] | undefined;
@@ -63,10 +66,16 @@ export class CadastroDespesaComponent {
     private readonly despesaServico: DespesaService,
     private messageService: MessageService,
     private cartaoService: CartaoService,
-    private categoriaServico: CategoriaService
+    private categoriaServico: CategoriaService,
+    private tipoDespesaService: TipoDespesaService
   ) {}
 
   ngOnInit() {
+    this.iniciarFormulario();
+    this.buscarAtributosIniciais();
+  }
+
+  iniciarFormulario() {
     this.cadastroForm = new FormGroup({
       valor: new FormControl(),
       categoria: new FormControl(''),
@@ -74,11 +83,15 @@ export class CadastroDespesaComponent {
       pagamento: new FormControl(''),
       parcela: new FormControl(''),
       cartao: new FormControl(''),
+      tipoDespesa: new FormControl(''),
     });
-    this.buscarListaCartao();
-    this.buscarListaCategoria();
   }
 
+  buscarAtributosIniciais() {
+    this.buscarListaCartao();
+    this.buscarListaCategoria();
+    this.buscarListaTipoDespesa();
+  }
   getPagamentoControl() {
     return this.cadastroForm.get('pagamento');
   }
@@ -151,6 +164,22 @@ export class CadastroDespesaComponent {
           severity: 'error',
           summary: 'Erro',
           detail: 'Erro ao buscar categorias!',
+        });
+      },
+    });
+  }
+
+  buscarListaTipoDespesa() {
+    this.tipoDespesaService.obterTipoDespesa().subscribe({
+      next: (response: ITipoDespesaResponse[]) => {
+        this.listaTipoDespesa = response;
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao buscar tipo despesa!',
         });
       },
     });

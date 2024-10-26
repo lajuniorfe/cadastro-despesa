@@ -16,12 +16,17 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-6">
+      <div class="col-4">
         <p-dropdown formControlName="categoria" [options]="listaCategorias" optionLabel="nome"
           placeholder="Selecione a categoria" styleClass="w-full" />
       </div>
 
-      <div class="col-6">
+      <div class="col-4">
+        <p-dropdown formControlName="tipoDespesa" [options]="listaTipoDespesa" optionLabel="nome"
+          placeholder="Tipo Despesa" styleClass="w-full" />
+      </div>
+
+      <div class="col-4">
         <p-dropdown formControlName="pagamento" [options]="listaPagamentos" optionLabel="nome"
           placeholder="Forma Pagamento" styleClass="w-full" (onChange)="onPagamentoChange($event)" />
       </div>
