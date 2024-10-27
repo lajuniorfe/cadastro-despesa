@@ -24,6 +24,8 @@ import { CategoriaService } from '../../api/categoria/services/categoria.service
 import { ICategoriaResponse } from '../../api/categoria/dtos/responses/categoria.responses';
 import { TipoDespesaService } from '../../api/tipo-despesa/services/tipo-despesa.service';
 import { ITipoDespesaResponse } from '../../api/tipo-despesa/dtos/responses/tipo-despesa.response';
+import { TipoPagamentoService } from '../../api/tipo-pagamento/services/tipo-pagamento.service';
+import { ITipoPagamentoResponse } from '../../api/tipo-pagamento/dtos/responses/tipo-pagamento.response';
 
 @Component({
   selector: 'app-cadastro-despesa',
@@ -49,17 +51,13 @@ export class CadastroDespesaComponent {
   cadastroForm!: FormGroup;
   listaCategorias: ICategoriaResponse[] | undefined;
   listaTipoDespesa: ITipoDespesaResponse[] | undefined;
-  listaPagamentos: any = [{ nome: 'Pix' }, { nome: 'Cartão de crédito' }];
+  listaPagamentos: ITipoPagamentoResponse[] | undefined;
   listaParcelas: any = [{ quantidade: '1X' }, { quantidade: '12X' }];
   listaCartoes: ICartaoResponse[] | undefined;
   carregando: boolean = false;
-  despesaCadastrar: IDespesaRequest = {
-    descricao: '',
-    valor: 0,
-    categoria: '',
-    formaPagamento: '',
-  };
-  exibir: boolean = false;
+  despesaCadastrar: IDespesaRequest | undefined;
+
+  carregandoInformacoes: boolean = true;
   exibirOpcoesCartao: boolean = false;
 
   constructor(
@@ -67,7 +65,8 @@ export class CadastroDespesaComponent {
     private messageService: MessageService,
     private cartaoService: CartaoService,
     private categoriaServico: CategoriaService,
-    private tipoDespesaService: TipoDespesaService
+    private tipoDespesaService: TipoDespesaService,
+    private tipoPagamentoServico: TipoPagamentoService
   ) {}
 
   ngOnInit() {
@@ -91,50 +90,53 @@ export class CadastroDespesaComponent {
     this.buscarListaCartao();
     this.buscarListaCategoria();
     this.buscarListaTipoDespesa();
+    this.buscarListaTipoPagamento();
+    this.carregandoInformacoes = false;
   }
   getPagamentoControl() {
     return this.cadastroForm.get('pagamento');
   }
 
-  onPagamentoChange(algo: any) {
-    if (algo.value.nome === 'Cartão de crédito') {
+  onPagamentoChange(pagamentoEscolhido: any) {
+    if (pagamentoEscolhido.nome === 'Cartão de Crédito') {
       this.exibirOpcoesCartao = true;
     } else {
       this.exibirOpcoesCartao = false;
     }
   }
   cadastrarDespesa() {
-    this.despesaCadastrar.categoria =
-      this.cadastroForm.get('categoria')?.value.nome;
+    const request = this.montarDespesaRequest();
+    // this.despesaCadastrar.categoria =
+    //   this.cadastroForm.get('categoria')?.value.nome;
 
-    this.despesaCadastrar.formaPagamento =
-      this.cadastroForm.get('pagamento')?.value.nome;
+    // this.despesaCadastrar.formaPagamento =
+    //   this.cadastroForm.get('pagamento')?.value.ome;
 
-    this.despesaCadastrar.descricao = this.cadastroForm.get('descricao')?.value;
+    // this.despesaCadastrar.descricao = this.cadastroForm.get('descricao')?.value;
 
-    this.despesaCadastrar.valor = this.cadastroForm.get('valor')?.value;
+    // this.despesaCadastrar.valor = this.cadastroForm.get('valor')?.value;
 
-    this.carregando = true;
+    // this.carregando = true;
 
-    this.despesaServico.cadastrarDespesa(this.despesaCadastrar).subscribe({
-      next: (response: IDespesaResponse) => {
-        console.log('Despesa cadastrada com sucesso:', response);
-      },
-      error: (erro) => {
-        this.carregando = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao cadastrar despesa!',
-        });
+    // this.despesaServico.cadastrarDespesa(this.despesaCadastrar).subscribe({
+    //   next: (response: IDespesaResponse) => {
+    //     console.log('Despesa cadastrada com sucesso:', response);
+    //   },
+    //   error: (erro) => {
+    //     this.carregando = false;
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Erro',
+    //       detail: 'Erro ao cadastrar despesa!',
+    //     });
 
-        console.error('Erro ao cadastrar despesa:', erro);
-      },
-      complete: () => {
-        this.carregando = false;
-        console.log('Requisição concluída.');
-      },
-    });
+    //     console.error('Erro ao cadastrar despesa:', erro);
+    //   },
+    //   complete: () => {
+    //     this.carregando = false;
+    //     console.log('Requisição concluída.');
+    //   },
+    // });
   }
 
   buscarListaCartao() {
@@ -185,6 +187,22 @@ export class CadastroDespesaComponent {
     });
   }
 
+  buscarListaTipoPagamento() {
+    this.tipoPagamentoServico.obterTipoPagamento().subscribe({
+      next: (response: ITipoPagamentoResponse[]) => {
+        this.listaPagamentos = response;
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao buscar tipo despesa!',
+        });
+      },
+    });
+  }
+
   buscarDespesa() {
     this.despesaServico.obterDespesas().subscribe({
       next: (response) => {
@@ -205,5 +223,22 @@ export class CadastroDespesaComponent {
         console.log('Requisição concluída.');
       },
     });
+  }
+
+  montarDespesaRequest() {
+    this.despesaCadastrar = {
+      Categoria: this.cadastroForm.get('categoria')?.value,
+      TipoPagamento: this.cadastroForm.get('pagamento')?.value,
+      TipoDespesa: this.cadastroForm.get('tipoDespesa')?.value,
+      Descricao: this.cadastroForm.get('descricao')?.value,
+      Valor: this.cadastroForm.get('valor')?.value,
+      Cartao:
+        this.cadastroForm.get('cartao')?.value === ''
+          ? null
+          : this.cadastroForm.get('cartao')?.value,
+      Parcela: this.cadastroForm.get('parcela')?.value,
+    };
+
+    console.log('aaaaaaaaaaaaaaaaaaaa', this.despesaCadastrar);
   }
 }
