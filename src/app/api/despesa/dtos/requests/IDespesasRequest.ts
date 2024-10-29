@@ -1,14 +1,12 @@
-import { ICartaoRequest } from '../../../cartao/dtos/requests/cartao.request';
-import { ICategoriaRequest } from '../../../categoria/dtos/requests/categoria.request';
-import { ITipoDespesaRequest } from '../../../tipo-despesa/dtos/requests/tipo-despesa.request';
-import { TipoPagamamentoRequest } from '../../../tipo-pagamento/dtos/requests/tipo-pagamento.request';
+import { Data } from '@angular/router';
 
 export interface IDespesaRequest {
-  Descricao: string;
-  Valor: number;
-  Categoria: ICategoriaRequest;
-  TipoPagamento: TipoPagamamentoRequest;
-  TipoDespesa: ITipoDespesaRequest;
-  Cartao: ICartaoRequest;
-  Parcela: number;
+  descricao: string;
+  data: string;
+  valor: number;
+  idCategoria: number;
+  idTipoPagamento: number;
+  idTipoDespesa: number;
+  idCartao: number;
+  parcela: number;
 }

@@ -26,7 +26,7 @@ import { TipoDespesaService } from '../../api/tipo-despesa/services/tipo-despesa
 import { ITipoDespesaResponse } from '../../api/tipo-despesa/dtos/responses/tipo-despesa.response';
 import { TipoPagamentoService } from '../../api/tipo-pagamento/services/tipo-pagamento.service';
 import { ITipoPagamentoResponse } from '../../api/tipo-pagamento/dtos/responses/tipo-pagamento.response';
-
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   selector: 'app-cadastro-despesa',
   standalone: true,
@@ -42,6 +42,7 @@ import { ITipoPagamentoResponse } from '../../api/tipo-pagamento/dtos/responses/
     ProgressSpinnerModule,
     CommonModule,
     ToastModule,
+    CalendarModule,
   ],
   providers: [MessageService],
   templateUrl: './cadastro-despesa.component.html',
@@ -52,11 +53,13 @@ export class CadastroDespesaComponent {
   listaCategorias: ICategoriaResponse[] | undefined;
   listaTipoDespesa: ITipoDespesaResponse[] | undefined;
   listaPagamentos: ITipoPagamentoResponse[] | undefined;
-  listaParcelas: any = [{ quantidade: '1X' }, { quantidade: '12X' }];
+  listaParcelas: any = [
+    { quantidade: '1X', valor: 1 },
+    { quantidade: '12X', valor: 12 },
+  ];
   listaCartoes: ICartaoResponse[] | undefined;
   carregando: boolean = false;
   despesaCadastrar: IDespesaRequest | undefined;
-
   carregandoInformacoes: boolean = true;
   exibirOpcoesCartao: boolean = false;
 
@@ -83,6 +86,7 @@ export class CadastroDespesaComponent {
       parcela: new FormControl(''),
       cartao: new FormControl(''),
       tipoDespesa: new FormControl(''),
+      data: new FormControl(''),
     });
   }
 
@@ -105,38 +109,34 @@ export class CadastroDespesaComponent {
     }
   }
   cadastrarDespesa() {
+    this.carregando = true;
     const request = this.montarDespesaRequest();
-    // this.despesaCadastrar.categoria =
-    //   this.cadastroForm.get('categoria')?.value.nome;
 
-    // this.despesaCadastrar.formaPagamento =
-    //   this.cadastroForm.get('pagamento')?.value.ome;
+    this.despesaServico.cadastrarDespesa(request).subscribe({
+      next: (response: IDespesaResponse) => {
+        console.log('Despesa cadastrada com sucesso:', response);
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao cadastrar despesa!',
+        });
 
-    // this.despesaCadastrar.descricao = this.cadastroForm.get('descricao')?.value;
-
-    // this.despesaCadastrar.valor = this.cadastroForm.get('valor')?.value;
-
-    // this.carregando = true;
-
-    // this.despesaServico.cadastrarDespesa(this.despesaCadastrar).subscribe({
-    //   next: (response: IDespesaResponse) => {
-    //     console.log('Despesa cadastrada com sucesso:', response);
-    //   },
-    //   error: (erro) => {
-    //     this.carregando = false;
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Erro',
-    //       detail: 'Erro ao cadastrar despesa!',
-    //     });
-
-    //     console.error('Erro ao cadastrar despesa:', erro);
-    //   },
-    //   complete: () => {
-    //     this.carregando = false;
-    //     console.log('Requisição concluída.');
-    //   },
-    // });
+        console.error('Erro ao cadastrar despesa:', erro);
+      },
+      complete: () => {
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Despesa Cadastrada!',
+        });
+        this.cadastroForm.reset();
+        this.exibirOpcoesCartao = false;
+      },
+    });
   }
 
   buscarListaCartao() {
@@ -225,20 +225,18 @@ export class CadastroDespesaComponent {
     });
   }
 
-  montarDespesaRequest() {
+  montarDespesaRequest(): IDespesaRequest {
     this.despesaCadastrar = {
-      Categoria: this.cadastroForm.get('categoria')?.value,
-      TipoPagamento: this.cadastroForm.get('pagamento')?.value,
-      TipoDespesa: this.cadastroForm.get('tipoDespesa')?.value,
-      Descricao: this.cadastroForm.get('descricao')?.value,
-      Valor: this.cadastroForm.get('valor')?.value,
-      Cartao:
-        this.cadastroForm.get('cartao')?.value === ''
-          ? null
-          : this.cadastroForm.get('cartao')?.value,
-      Parcela: this.cadastroForm.get('parcela')?.value,
+      idCategoria: this.cadastroForm.get('categoria')?.value.id,
+      idTipoPagamento: this.cadastroForm.get('pagamento')?.value.id,
+      idTipoDespesa: this.cadastroForm.get('tipoDespesa')?.value.id,
+      descricao: this.cadastroForm.get('descricao')?.value,
+      valor: this.cadastroForm.get('valor')?.value,
+      idCartao: this.cadastroForm.get('cartao')?.value.id || null,
+      parcela: this.cadastroForm.get('parcela')?.value.valor,
+      data: new Date(this.cadastroForm.get('data')?.value).toISOString(),
     };
 
-    console.log('aaaaaaaaaaaaaaaaaaaa', this.despesaCadastrar);
+    return this.despesaCadastrar;
   }
 }

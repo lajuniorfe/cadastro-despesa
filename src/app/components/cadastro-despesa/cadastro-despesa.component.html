@@ -1,18 +1,26 @@
 <p-card header="Cadastro de despesa" styleClass="m-8 shadow-4">
   <form [formGroup]="cadastroForm">
     <div class="grid">
-      <div class="col-6">
+      <div class="col-4">
         <p-floatLabel>
           <input type="text" pInputText formControlName="descricao" class="w-full" />
           <label for="descricao">Despesa</label>
         </p-floatLabel>
       </div>
 
-      <div class="col-6">
+      <div class="col-4">
         <p-floatLabel>
           <p-inputNumber inputId="valor-despesa" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
-            formControlName="valor" class="w-full" />
+            formControlName="valor" styleClass="w-full" class="w-full" />
           <label for="despesa">Valor Despesa</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-4">
+        <p-floatLabel>
+          <p-calendar formControlName="data" dateFormat="dd/mm/yy" styleClass="w-full" [iconDisplay]="'input'"
+            [showIcon]="true" inputId="icondisplay" [touchUI]="true" [readonlyInput]="true" />
+          <label for="data">Data</label>
         </p-floatLabel>
       </div>
 
@@ -50,10 +58,12 @@
       <div class="col-12">
         <div class="flex justify-content-end flex-wrap flex align-content-end">
           <div class="flex align-items-center justify-content-center font-bold border-round m-2">
-            <p-button label="Cancelar" [text]="true" [raised]="true" severity="danger" />
+            <p-button label="Cancelar" [text]="true" [raised]="true" severity="danger" [disabled]="carregando" />
           </div>
           <div class="flex align-items-center justify-content-center font-bold border-round m-2">
-            <p-button id="btn-cadastrar" label="Cadastrar" styleClass="w-full" (onClick)="cadastrarDespesa()" />
+            <p-button id="btn-cadastrar" [disabled]="carregando" label="Cadastrar" styleClass="w-full"
+              (onClick)="cadastrarDespesa()">
+            </p-button>
           </div>
         </div>
       </div>
@@ -67,3 +77,4 @@
     }
   </form>
 </p-card>
+<p-toast />
