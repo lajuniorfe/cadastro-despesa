@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class CategoriaService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   obterCategoriasDespesas(): Observable<ICategoriaResponse[]> {
     return this.http.get<ICategoriaResponse[]>(`${this.apiUrl}/categoria/`);

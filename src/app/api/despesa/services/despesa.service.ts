@@ -11,7 +11,7 @@ import { environment } from '../../../../environments/environments';
 export class DespesaService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   obterDespesas(): Observable<IDespesaResponse[]> {
     return this.http.get<IDespesaResponse[]>(`${this.apiUrl}/despesa/`);

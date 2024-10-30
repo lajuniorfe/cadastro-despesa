@@ -10,7 +10,7 @@ import { ICartaoResponse } from '../dtos/responses/cartao.response';
 export class CartaoService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   buscarCartoes(): Observable<ICartaoResponse[]> {
     return this.http.get<ICartaoResponse[]>(`${this.apiUrl}/cartao/`);

@@ -10,7 +10,7 @@ import { ITipoPagamentoResponse } from '../dtos/responses/tipo-pagamento.respons
 export class TipoPagamentoService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   obterTipoPagamento(): Observable<ITipoPagamentoResponse[]> {
     return this.http.get<ITipoPagamentoResponse[]>(
