@@ -1,3 +1,4 @@
+@if(!carregandoInformacoes){
 <p-card header="Cadastro de despesa" styleClass="md:m-8 lg:m-8 sm:m-3  shadow-4">
   <form [formGroup]="cadastroForm">
     <div class="grid">
@@ -44,7 +45,7 @@
       }
 
 
-      @if(exibirOpcoesCartao ){
+      @if(!exibirOpcoesCartao ){
       <div class="col-12 md:col-6 lg:col-6">
         <p-dropdown formControlName="cartao" [options]="listaCartoes" optionLabel="nome"
           [loading]="carregandoInformacoes" placeholder="Cartões" styleClass="w-full" />
@@ -79,3 +80,8 @@
   </form>
 </p-card>
 <p-toast />
+
+}
+@else if(carregandoInformacoes) {
+<app-loading></app-loading>
+}

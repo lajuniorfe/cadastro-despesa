@@ -27,6 +27,7 @@ import { ITipoDespesaResponse } from '../../api/tipo-despesa/dtos/responses/tipo
 import { TipoPagamentoService } from '../../api/tipo-pagamento/services/tipo-pagamento.service';
 import { ITipoPagamentoResponse } from '../../api/tipo-pagamento/dtos/responses/tipo-pagamento.response';
 import { CalendarModule } from 'primeng/calendar';
+import { LoadingComponent } from '../loading/loading.component';
 @Component({
   selector: 'app-cadastro-despesa',
   standalone: true,
@@ -43,6 +44,7 @@ import { CalendarModule } from 'primeng/calendar';
     CommonModule,
     ToastModule,
     CalendarModule,
+    LoadingComponent,
   ],
   providers: [MessageService],
   templateUrl: './cadastro-despesa.component.html',
@@ -72,9 +74,10 @@ export class CadastroDespesaComponent {
     private tipoPagamentoServico: TipoPagamentoService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.iniciarFormulario();
-    this.buscarAtributosIniciais();
+    await this.buscarAtributosIniciais();
+    this.carregandoInformacoes = false;
   }
 
   iniciarFormulario() {
@@ -90,12 +93,11 @@ export class CadastroDespesaComponent {
     });
   }
 
-  buscarAtributosIniciais() {
+  async buscarAtributosIniciais(): Promise<void> {
     this.buscarListaCartao();
     this.buscarListaCategoria();
     this.buscarListaTipoDespesa();
     this.buscarListaTipoPagamento();
-    this.carregandoInformacoes = false;
   }
   getPagamentoControl() {
     return this.cadastroForm.get('pagamento');
