@@ -94,11 +94,21 @@ export class CadastroDespesaComponent {
   }
 
   async buscarAtributosIniciais(): Promise<void> {
-    this.buscarListaCartao();
-    this.buscarListaCategoria();
-    this.buscarListaTipoDespesa();
-    this.buscarListaTipoPagamento();
+    await Promise.all([
+      this.promisify(this.buscarListaCartao),
+      this.promisify(this.buscarListaCategoria),
+      this.promisify(this.buscarListaTipoDespesa),
+      this.promisify(this.buscarListaTipoPagamento),
+    ]);
   }
+
+  promisify(func: Function): Promise<void> {
+    return new Promise((resolve) => {
+      func.call(this);
+      resolve();
+    });
+  }
+
   getPagamentoControl() {
     return this.cadastroForm.get('pagamento');
   }
