@@ -28,6 +28,7 @@ import { TipoPagamentoService } from '../../api/tipo-pagamento/services/tipo-pag
 import { ITipoPagamentoResponse } from '../../api/tipo-pagamento/dtos/responses/tipo-pagamento.response';
 import { CalendarModule } from 'primeng/calendar';
 import { LoadingComponent } from '../loading/loading.component';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-cadastro-despesa',
   standalone: true,
@@ -104,19 +105,10 @@ export class CadastroDespesaComponent {
   }
 
   async buscarAtributosIniciais(): Promise<void> {
-    await Promise.all([
-      this.promisify(this.buscarListaCartao),
-      this.promisify(this.buscarListaCategoria),
-      this.promisify(this.buscarListaTipoDespesa),
-      this.promisify(this.buscarListaTipoPagamento),
-    ]);
-  }
-
-  promisify(func: Function): Promise<void> {
-    return new Promise((resolve) => {
-      func.call(this);
-      resolve();
-    });
+    this.buscarListaCartao();
+    this.buscarListaCategoria();
+    this.buscarListaTipoDespesa();
+    await this.buscarListaTipoPagamento();
   }
 
   getPagamentoControl() {
@@ -209,20 +201,19 @@ export class CadastroDespesaComponent {
     });
   }
 
-  buscarListaTipoPagamento() {
-    this.tipoPagamentoServico.obterTipoPagamento().subscribe({
-      next: (response: ITipoPagamentoResponse[]) => {
-        this.listaPagamentos = response;
-      },
-      error: (erro) => {
-        this.carregando = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao buscar tipo despesa!',
-        });
-      },
-    });
+  async buscarListaTipoPagamento(): Promise<void> {
+    try {
+      this.listaPagamentos = await firstValueFrom(
+        this.tipoPagamentoServico.obterTipoPagamento()
+      );
+    } catch (erro) {
+      this.carregando = false;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Erro ao buscar tipo despesa!',
+      });
+    }
   }
 
   buscarDespesa() {
