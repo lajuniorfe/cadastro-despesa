@@ -57,6 +57,16 @@ export class CadastroDespesaComponent {
   listaPagamentos: ITipoPagamentoResponse[] | undefined;
   listaParcelas: any = [
     { quantidade: '1X', valor: 1 },
+    { quantidade: '2X', valor: 2 },
+    { quantidade: '3X', valor: 3 },
+    { quantidade: '4X', valor: 4 },
+    { quantidade: '5X', valor: 5 },
+    { quantidade: '6X', valor: 6 },
+    { quantidade: '7X', valor: 7 },
+    { quantidade: '8X', valor: 8 },
+    { quantidade: '9X', valor: 9 },
+    { quantidade: '10X', valor: 10 },
+    { quantidade: '11X', valor: 11 },
     { quantidade: '12X', valor: 12 },
   ];
   listaCartoes: ICartaoResponse[] | undefined;
