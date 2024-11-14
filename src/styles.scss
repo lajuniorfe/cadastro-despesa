@@ -1,4 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+:root{
+  --primary-bg-color: #263238;
+  --primary-text-color: #fff;
+}
+
+html body{
+  width: 100%;
+  margin: 0px ;
+  height: 100%;
+}
+
 .p-inputnumber-input {
   padding-right: 0;
+}
+
+//mainlayout//////////
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  display: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  transition: width 0.3s ease;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+//painel////////
+.p-panel-content,.p-panel-header{
+  background-color: #282e38;
+  border: none;
+}
+.p-panel-title{
+  color: white;
+}
+
+//Menu horizontal
+.p-menubar {
+   border: 0;
+}
+
+//Mnu vertical
+.p-menu {
+  background-color: #282e38;
+  border: none;
+}
+
+//paginação tabela
+.p-paginator{
+  background-color: #282e38;
 }

@@ -1,0 +1,15 @@
+<div class="container bg-bluegray-900 ">
+  <div class="sidebar " [class.collapsed]="isCollapsed">
+    <br />
+    <br />
+    <br />
+    <p-menu [model]="items" [style]="{ width: isCollapsed ? '0' : '200px' }"></p-menu>
+  </div>
+
+  <div class="content w-full bg-bluegray-900" [class.expanded]="isCollapsed">
+    <app-header (exibicaoMenuLateral)="toggleSidebar($event)"></app-header>
+    <div class="main-content overflow-auto bg-bluegray-900">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
