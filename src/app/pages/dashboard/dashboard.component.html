@@ -1,0 +1,70 @@
+<section>
+  <div class="grid">
+    <div class="col-12 md:col-3 lg:col-3 shadow-6">
+      <p-panel header="Receitas Líquidas">
+        <p-tag styleClass="bg-green-400" icon="pi pi-dollar" value="R$ 6500" />
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-3 lg:col-3 shadow-6">
+      <p-panel header="Despesas Previstas">
+        <p-tag icon="pi pi-dollar" value="R$ {{despesaPrevista}}" />
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-3 lg:col-3 shadow-6">
+      <p-panel header="Despesas Atuais">
+        @if(despesaAtual
+        <= despesaPrevista){ <p-tag styleClass="bg-green-400" icon="pi pi-dollar" value="R$ {{despesaAtual}}" />
+        }@else{
+        <p-tag styleClass="bg-red-500" icon="pi pi-dollar" value="R$ {{despesaAtual}}" />
+        }
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-3 lg:col-3 shadow-6">
+      <p-panel header="Saldo">
+        @if(saldo
+        >= 0){ <p-tag styleClass="bg-green-400" icon="pi pi-dollar" value="R$ {{saldo}}" />
+        }@else{
+        <p-tag styleClass="bg-red-500" icon="pi pi-dollar" value="R$ {{saldo}}" />
+        }
+      </p-panel>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="grid nested-grid">
+    <div class="col-12 md:col-5 lg:col-5">
+      <div class="shadow-6">
+        <p-panel header="Faturas">
+          <app-faturas-lista></app-faturas-lista>
+        </p-panel>
+      </div>
+      <div class="shadow-6 pt-1">
+        <p-panel header="Gastos por Categorias" class="shadow-6">
+          <app-grafico-despesas-categorias></app-grafico-despesas-categorias>
+        </p-panel>
+      </div>
+      <div class="shadow-6 pt-1">
+        <p-panel header="Parcelas de Despesas">
+          <p>Grafico de pizza com despesas parceladas separadas por cartao</p>
+        </p-panel>
+      </div>
+    </div>
+    <div class="col-12 md:col-7 lg:col-7 shadow-6">
+      <p-panel styleClass="text-white	">
+        <app-lista-gastos></app-lista-gastos>
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-6 lg:col-6 shadow-6">
+      <p-panel header="Tendencias de Despesas">
+        <p> linhas ou barras Tendências de Despesas ao Longo do ano</p>
+        <p> linhas ou barras Tendências de Despesas ao Longo do mes</p>
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-6 lg:col-6 shadow-6">
+      <p-panel header="Previsão de Dinheiro guardado">
+        <p>Grafico com investido a cada mês e o total no final do ano </p>
+      </p-panel>
+    </div>
+  </div>
+</section>
