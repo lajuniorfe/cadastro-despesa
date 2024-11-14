@@ -8,7 +8,7 @@ import { IListarFaturasRequest } from '../dtos/requests/listar-faturas.request';
   providedIn: 'root',
 })
 export class FaturaService {
-  private readonly apiUrl = environment.apiPython;
+  private readonly apiUrlDados = environment.apiUrlDados;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class FaturaService {
     ano: number
   ): Observable<IListarFaturasRequest[]> {
     return this.http.get<IListarFaturasRequest[]>(
-      `${this.apiUrl}/faturas/${mes}/${ano}`
+      `${this.apiUrlDados}/faturas/${mes}/${ano}`
     );
   }
 }

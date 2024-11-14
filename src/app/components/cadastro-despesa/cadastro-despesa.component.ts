@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DespesaService } from '../../api/despesa/services/despesa.service';
 import { IDespesaResponse } from '../../api/despesa/dtos/responses/despesa.response';
-import { IDespesaRequest } from '../../api/despesa/dtos/requests/IDespesasRequest';
+import { IDespesaRequest } from '../../api/despesa/dtos/requests/despesa.request';
 import { CommonModule } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
