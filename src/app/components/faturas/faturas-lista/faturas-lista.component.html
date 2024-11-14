@@ -1,0 +1,26 @@
+<section>
+  <p-table [value]="listaFaturas">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="bg-bluegray-900 text-white px-0 py-1">Cartão</th>
+        <th class="bg-bluegray-900 text-white px-0 py-1">Valor</th>
+        <th class="bg-bluegray-900 text-white px-0 py-1">Vencimento</th>
+        <th class="bg-bluegray-900 text-white px-0 py-1">Pagamento</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-fatura>
+      <tr class="bg-bluegray-900">
+        <td class="text-white px-0 py-1">{{ fatura.nome }}</td>
+        <td class="text-white px-0 py-1">{{ fatura.valor }}</td>
+        <td class="text-white pl-2 py-1">{{ formatarData(fatura.data_vencimento) }}</td>
+        <td class="text-white pl-2 py-1">
+          @if(fatura.status){
+          <p-tag styleClass="bg-green-500" value="Pago" />
+          }@else {
+          <p-tag styleClass="bg-red-500" value="Pendente" />
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</section>
